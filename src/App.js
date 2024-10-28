@@ -1,72 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
+import Menu from "./components/Menu/Menu";
+import Cart from "./components/Cart/Cart";
+import { CartProvider } from "./context/CartContext";
 
 function App() {
-  const [result, setResult] = useState(null);
-  const [expression, setExpression] = useState("");
-  const displayNumber = (number) => {
-    if (
-      expression === "Error" ||
-      (result !== null && expression === result.toString())
-    ) {
-      const newExpression = number.toString();
-      setExpression(newExpression);
-    } else {
-      const newExpression = expression + number.toString();
-      setExpression(newExpression);
-    }
-  };
-  const displayOperand = (operand) => {
-    if (expression === "Error") {
-      setExpression("");
-    } else {
-      const newExpression = expression + operand;
-      setExpression(newExpression);
-    }
-  };
-  const calculate = () => {
-    try {
-      const evalResult = eval(expression);
-      setResult(evalResult);
-      setExpression(evalResult.toString());
-    } catch (error) {
-      setExpression("Error");
-    }
-  };
-
-  const clearExpression = () => {
-    setExpression("");
-    setResult(null);
-  };
-
   return (
-    <div className="container">
-      <div className="result">{expression || "0"}</div>
-      <div className="row">
-        <button onClick={clearExpression}>C</button>
-        <button onClick={() => displayNumber(0)}>0</button>
-        <button onClick={() => displayNumber(1)}>1</button>
-        <button onClick={() => displayOperand("+")}>+</button>
-      </div>
-      <div className="row">
-        <button onClick={() => displayNumber(2)}>2</button>
-        <button onClick={() => displayNumber(3)}>3</button>
-        <button onClick={() => displayNumber(4)}>4</button>
-        <button onClick={() => displayOperand("-")}>-</button>
-      </div>
-      <div className="row">
-        <button onClick={() => displayNumber(5)}>5</button>
-        <button onClick={() => displayNumber(6)}>6</button>
-        <button onClick={() => displayNumber(7)}>7</button>
-        <button onClick={() => displayOperand("*")}>*</button>
-      </div>
-      <div className="row">
-        <button onClick={() => displayNumber(8)}>8</button>
-        <button onClick={() => displayNumber(9)}>9</button>
-        <button onClick={calculate}>=</button>
-        <button onClick={() => displayOperand("/")}>/</button>
-      </div>
-    </div>
+    <CartProvider>
+      <Router>
+        <nav>
+          <Link to="/">Menu</Link>
+          <Link to="/cart">Cart</Link>
+        </nav>
+        <Routes>
+          <Route path="/" element={<Menu />} />
+          <Route path="/cart" element={<Cart />} />
+        </Routes>
+      </Router>
+    </CartProvider>
   );
 }
 
