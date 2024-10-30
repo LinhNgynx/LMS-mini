@@ -1,14 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { CartContext } from "../../context/CartContext";
-
+import './Cart.css'
+import { CouponContext } from "../../context/CouponContext";
+import Modal from "../Modal/Modal";
 export default function Cart() {
   const { cart, setCart } = useContext(CartContext);
-
-  const handleRemove = (itemRemove) => {
-    const newCart = cart.filter((item) => item !== itemRemove);
+  const {coupons, setCoupons} = useContext(CouponContext)
+  const [selectCoupon, setSelectCoupon]=useState(false);
+  const handleRemove = (itemRemoveID) => {
+    const newCart = cart.filter((item) => item.id !== itemRemoveID);
     setCart(newCart);
   };
-
   const handleIncrease = (index) => {
     setCart(
       cart.map((item) =>
@@ -34,14 +36,21 @@ export default function Cart() {
       )
     );
   };
-
+  const handleSelectCoupon =()=>{
+    setSelectCoupon(true);
+  }
+  const handleDisableCoupon = () =>{
+        setCoupons({});
+  }
   const totalPrice = cart.reduce(
     (total, item) => (item.buyNow ? total + item.price * item.quantity : total),
     0
   );
-
+  const discount = coupons?.discount || 0;
+  const finalPrice = totalPrice * (1 - discount);
   return (
     <div>
+    <div className={selectCoupon? 'fade' : ''}>
       <h2>Cart</h2>
       <div>
         <h3>Your Cart</h3>
@@ -82,16 +91,19 @@ export default function Cart() {
                 </button>
               </div>
               <p>Total Price: {item.quantity * item.price} $</p>
-              <button onClick={() => handleRemove(item)}>Remove</button>
+              <button onClick={() => handleRemove(item.id)}>Remove</button>
             </div>
           ))}
         </div>
         <div>
-          <p>Total: {totalPrice} $</p>
+          <p>Total: {finalPrice.toFixed(2)} $</p>
           <button>Purchase</button>
-          <button>Coupon</button>
+          <button onClick={handleSelectCoupon}>Coupon</button>
         </div>
+        {Object.keys(coupons).length !== 0&&<button onClick={handleDisableCoupon}>Disable Coupon</button>}
       </div>
+    </div>
+    {selectCoupon&& <Modal setIsSelect={setSelectCoupon}/>}
     </div>
   );
 }
