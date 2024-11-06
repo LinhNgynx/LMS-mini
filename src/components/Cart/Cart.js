@@ -102,7 +102,7 @@ export default function Cart() {
         </div>
         {Object.keys(coupons).length !== 0&&<button onClick={handleDisableCoupon}>Disable Coupon</button>}
       </div>
-    </div>
+    </div >
     {selectCoupon&& <Modal setIsSelect={setSelectCoupon}/>}
     </div>
   );

@@ -1,9 +1,14 @@
 import React from "react";
-import CartApp from "./CartApp";
-
+import Start from "./components/Start/Start";
+import Board from "./components/Board/Board";
+import { BoardProvider } from "./context/BoardContext";
 function App() {
   return (
-    <><CartApp /></>
+    <>
+      <BoardProvider>
+        <Board />
+      </BoardProvider>
+    </>
   );
 }
 
