@@ -1,14 +1,10 @@
 import React from "react";
-import Start from "./components/Start/Start";
-import Board from "./components/Board/Board";
-import { BoardProvider } from "./context/BoardContext";
+import QuizApp from "./QuizApp";
 function App() {
   return (
-    <>
-      <BoardProvider>
-        <Board />
-      </BoardProvider>
-    </>
+    <div>
+       <QuizApp />
+    </div>
   );
 }
 
